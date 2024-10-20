@@ -15,7 +15,8 @@ public class testingArchitect : MonoBehaviour
         "I want to say somethings, come over here.",
         "The world is crazy place sometime.",
         "Don't lose hope, Things will get better!",
-        "Tt's a bird? It's a plane? No - ! It's an Ender Dragon!"
+        "Tt's a bird? It's a plane? No - ! It's an Ender Dragon!",
+        "สวัสดีค่ะ"
     };
 
     // Start is called before the first frame update
