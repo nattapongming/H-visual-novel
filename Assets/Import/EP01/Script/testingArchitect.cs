@@ -7,6 +7,8 @@ public class testingArchitect : MonoBehaviour
     DialogueSystem ds;
     TextArchitect architect;
 
+    public TextArchitect.BuildMethod bm = TextArchitect.BuildMethod.instant;
+
     string[] lines = new string[]
     {
         "This is a random line of dialogue.",
@@ -30,6 +32,14 @@ public class testingArchitect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(bm != architect.buildMethod)
+        {
+            architect.buildMethod = bm;
+            architect.Stop();
+        }
+
+        if (Input.GetKeyDown(KeyCode.S)) { architect.Stop(); }
+
         // press to create text
         if (Input.GetKeyDown(KeyCode.Space))
         {
