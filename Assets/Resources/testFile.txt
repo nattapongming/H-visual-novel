@@ -1,4 +1,3 @@
-Hi
-What's up?
-Yo
-WHAT'S UP?!
+Lena "H-Hi um..." list(item -f long), playsong("Intro song" v -1)
+
+Lena "Err... c-can you hear me?"
