@@ -9,10 +9,10 @@ namespace DIALOGUE
     {
         // using dialogue container script
         public DialogueContainer dialogueContainer = new DialogueContainer();
-        private conversationManager conversationManager;
+        private ConversationManager conversationManager;
         private TextArchitect architect;
 
-        public static DialogueSystem instance;
+        public static DialogueSystem instance { get; private set; }
 
         //when this event trigger anything subscribe to this method will do theirs logic
         public delegate void DialogueSystemEvent();
@@ -37,7 +37,7 @@ namespace DIALOGUE
             if (_initialize) return;
 
             architect = new TextArchitect(dialogueContainer.dialogueText);
-            conversationManager = new conversationManager(architect);
+            conversationManager = new ConversationManager(architect);
         }
         
         public void OnUserPrompt_Next()
@@ -48,6 +48,8 @@ namespace DIALOGUE
         {
             if (speakerName.ToLower() != "narrator")
                 dialogueContainer.nameContainer.Show(speakerName);
+            else
+                HideSpeakerName();
         }
 
         public void HideSpeakerName() => dialogueContainer.nameContainer.Hide();

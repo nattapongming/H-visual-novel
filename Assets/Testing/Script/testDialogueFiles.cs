@@ -5,7 +5,8 @@ using DIALOGUE;
 
 public class testDialogueFiles : MonoBehaviour
 {
-    
+    [SerializeField] private TextAsset fileToRead = null;
+
     void Start()
     {
         StartConversation();
@@ -14,8 +15,10 @@ public class testDialogueFiles : MonoBehaviour
     //Read text asset and send to Dialogue System
     void StartConversation()
     {
-        List<string> lines = FileManager.ReadTextAsset("testFile");
+        List<string> lines = FileManager.ReadTextAsset(fileToRead);
 
         DialogueSystem.instance.Say(lines);
+
+        //DialogueSystem.instance.Say(lines);
     }
 }

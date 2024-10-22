@@ -22,7 +22,7 @@ namespace TESTING
                 if (line == string.Empty)
                     continue;
 
-                DIALOGUE_LINE dl = dialogueParser.Parse(line);
+                DIALOGUE_LINE dl = DialogueParser.Parse(line);
             }
         }
     }

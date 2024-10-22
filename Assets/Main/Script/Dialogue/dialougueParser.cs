@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace DIALOGUE
 {
-    public class dialogueParser
+    public class DialogueParser
     {
         // '\' or escape is used to cancel effect of char after it
         // '\\' mean cancel the escape affect of the next escape
@@ -20,13 +20,13 @@ namespace DIALOGUE
 
         public static DIALOGUE_LINE Parse(string rawLine)
         {
-            Debug.Log($"Prasing line '{rawLine}'");
+            //Debug.Log($"Prasing line '{rawLine}'");
 
             //seperate line into 3 sector speaker, dialogue command
 
             (string speaker, string dialogue, string commands) = RipConntent(rawLine);
 
-            Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
+            //Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
 
             return new DIALOGUE_LINE(speaker, dialogue, commands);
         }

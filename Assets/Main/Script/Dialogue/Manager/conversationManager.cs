@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 namespace DIALOGUE
 {
-    public class conversationManager 
+    public class ConversationManager 
     {
         private DialogueSystem dialogueSystem => DialogueSystem.instance;
 
@@ -15,7 +16,7 @@ namespace DIALOGUE
         private bool userPrompt = false;
 
         //ascess to text architect dicrectly to have the same architext as dialogue system
-        public conversationManager(TextArchitect architect)
+        public ConversationManager(TextArchitect architect)
         {
             this.architect = architect;
 
@@ -52,7 +53,7 @@ namespace DIALOGUE
                     continue;
 
                 //try prase line
-                DIALOGUE_LINE line = dialogueParser.Parse(conversation[i]);
+                DIALOGUE_LINE line = DialogueParser.Parse(conversation[i]);
                 
                 //show dialogue
                 if (line.hasDialogue)
@@ -74,11 +75,10 @@ namespace DIALOGUE
             //if there's speaker name then shower otherside don't
             if (line.hasSpeaker)
                 dialogueSystem.ShowSpeakerName(line.speaker);
-            else
-                dialogueSystem.HideSpeakerName();
+            
 
             //Build dialogue
-            yield return BuildDialogue(line.dialogue);
+            yield return BuildLineSegments(line.dialogue);
 
             //Wait for user Input
             yield return WaitForUserInput();
@@ -90,10 +90,47 @@ namespace DIALOGUE
             yield return null ;
         }
 
-        IEnumerator BuildDialogue(string dialogue)
+        IEnumerator BuildLineSegments(DL_DIALOGUE_DATA line)
         {
-            architect.Build(dialogue);
+            for(int i = 0; i < line.segments.Count; i++)
+            {
+                DL_DIALOGUE_DATA.DIALOGUE_SEGMENT segment = line.segments[i];
 
+                yield return WaitForDialogueSegmantSignalTobeTriggered(segment);
+
+                yield return BuildDialogue(segment.dialogue, segment.appendText);
+            }
+
+            
+        }
+
+        IEnumerator WaitForDialogueSegmantSignalTobeTriggered(DL_DIALOGUE_DATA.DIALOGUE_SEGMENT segment)
+        {
+            switch(segment.startSignal)
+            {
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.C:
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.A:
+                    yield return WaitForUserInput();
+                    break;
+
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WA:
+                case DL_DIALOGUE_DATA.DIALOGUE_SEGMENT.StartSignal.WC:
+                    yield return new WaitForSeconds(segment.signalDelay);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+        IEnumerator BuildDialogue(string dialogue, bool append = false)
+        {
+            //Build dialogue
+            if (!append)
+                architect.Build(dialogue);
+            else 
+                architect.Append(dialogue);
+
+            //wait for dialogue to complete
             while (architect.isBuilding)
             {
                 if (userPrompt)

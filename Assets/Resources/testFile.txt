@@ -1,3 +1,11 @@
-Lena "H-Hi um..." list(item -f long), playsong("Intro song" v -1)
+Lena "H-Hi.{a} um..." 
+Lena "Err... {wa 1} c-can you hear me?"
 
-Lena "Err... c-can you hear me?"
+Narrator "Narrator {c} is speaking now"
+"Narrator {wc 1} continue to speak"
+
+Ellen "Yeah... I can hear you."
+"Where are you?"
+
+Lena "Well.. I'm right behind you..."
+"Hi there..."
