@@ -12,8 +12,9 @@ namespace DIALOGUE
 
         // create regex to recognize command pattern
         //exsample "\w" to find word 
+        //of "@ to make them all string"
 
-        private const string commandRegexPattern = "\\w*[^\\s]\\(";
+        private const string commandRegexPattern = @"\w*[^\s]\(";
 
         //translate: find any world at any lenght except white space unit found '('
         //           |     \\w     |      *      |  ^   |    \\s    |      \\C

@@ -18,7 +18,5 @@ public class testDialogueFiles : MonoBehaviour
         List<string> lines = FileManager.ReadTextAsset(fileToRead);
 
         DialogueSystem.instance.Say(lines);
-
-        //DialogueSystem.instance.Say(lines);
     }
 }

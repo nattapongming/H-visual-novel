@@ -74,7 +74,7 @@ namespace DIALOGUE
         {
             //if there's speaker name then shower otherside don't
             if (line.hasSpeaker)
-                dialogueSystem.ShowSpeakerName(line.speaker);
+                dialogueSystem.ShowSpeakerName(line.speaker.displayname);
             
 
             //Build dialogue
