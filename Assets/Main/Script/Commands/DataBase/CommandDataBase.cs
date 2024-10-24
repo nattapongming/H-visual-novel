@@ -2,9 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static DL_COMMAND_DATA;
 
-public class CommandDataBase : MonoBehaviour
+public class CommandDataBase
 {
 
     //collect comand and it's action

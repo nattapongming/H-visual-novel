@@ -36,6 +36,14 @@ public class DL_COMMAND_DATA
             int index = cmd.IndexOf(ARGUMENTSCONTAINER_ID);
             command.name = cmd.Substring(0, index).Trim();
 
+            if (command.name.ToLower().StartsWith(WAITCOMMAND_ID))
+            {
+                command.name = command.name.Substring(WAITCOMMAND_ID.Length);
+                command.waitForCompletion = true;
+            }
+            else command.waitForCompletion = false;
+
+
             command.arguments = GetArgs(cmd.Substring(index + 1, cmd.Length - index - 2));
             result.Add(command);
         }

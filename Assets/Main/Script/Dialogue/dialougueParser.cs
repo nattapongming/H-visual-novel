@@ -14,20 +14,20 @@ namespace DIALOGUE
         //exsample "\w" to find word 
         //of "@ to make them all string"
 
-        private const string commandRegexPattern = @"\w*[^\s]\(";
+        private const string commandRegexPattern = @"[\w\[\]]*[^\s]\(";
 
-        //translate: find any world at any lenght except white space unit found '('
-        //           |     \\w     |      *      |  ^   |    \\s    |      \\C
+        //translate: convert to string and find any words or '[' , ']' at any lenght except white space unit found '('
+        //                      @                \w          \[     \[        *         ^        \s           \C
 
         public static DIALOGUE_LINE Parse(string rawLine)
         {
-            //Debug.Log($"Prasing line '{rawLine}'");
+            Debug.Log($"Prasing line '{rawLine}'");
 
             //seperate line into 3 sector speaker, dialogue command
 
             (string speaker, string dialogue, string commands) = RipConntent(rawLine);
 
-            //Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
+            Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
 
             return new DIALOGUE_LINE(speaker, dialogue, commands);
         }
@@ -77,22 +77,26 @@ namespace DIALOGUE
             Regex commandPegex = new Regex(commandRegexPattern);
 
             //if match keep the info in here
-            Match match = commandPegex.Match(rawLine);
+            MatchCollection matches = commandPegex.Matches(rawLine);
             int commandStart = -1;
-            if(match.Success)
+            foreach(Match match in matches)
             {
-                commandStart = match.Index;
 
-                //if there aren't any dialogue assume the rest are commands and get rid of left over white space behind it
-                if (dialogueStart == -1 && dialogueEnd == -1)
+                if (match.Index < dialogueStart || match.Index > dialogueEnd)
                 {
-                    return ("", "", rawLine.Trim());
+                    commandStart = match.Index;
+                    break;
                 }
             }
 
+
+            //if there aren't any dialogue assume the rest are commands and get rid of left over white space behind it
+            if (commandStart != -1 && (dialogueStart == -1 && dialogueEnd == -1))
+                return ("", "", rawLine.Trim());
+
             //what we have is either dialogue of mutli word arguments in commands.
             // aka. Is this dialogue?
-            if(dialogueStart != -1 && dialogueEnd != -1 && (commandStart == -1 || commandStart > dialogueEnd))
+            if (dialogueStart != -1 && dialogueEnd != -1 && (commandStart == -1 || commandStart > dialogueEnd))
             {
                 //ok this is a dialogue
                 speaker = rawLine.Substring(0, dialogueStart).Trim();
@@ -105,10 +109,9 @@ namespace DIALOGUE
                 //this dialogue just argument in command
                 commands = rawLine;
             }
-            else
-            {
-                speaker = rawLine;
-            }
+            else            
+                dialogue = rawLine;
+            
 
             return (speaker, dialogue, commands);
         }
