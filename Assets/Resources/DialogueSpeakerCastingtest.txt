@@ -1,0 +1,11 @@
+Lena as ??? "H-Hi.{a} um..." playSong("Silent Night" -v 1 -p 1)
+
+Narrator "as she said another girl then around."
+
+Lena as ??? at 1:0 "Err... {wa 1} c-can you hear me?"
+
+Ellen [0:Student, 1:Worry] at 0.5:0.5 "Yeah... I can hear you."
+"Where are you?"
+
+Lena "Well.. I'm right behind you..."
+"Hi there..."

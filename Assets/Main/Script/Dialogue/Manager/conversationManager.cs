@@ -74,11 +74,11 @@ namespace DIALOGUE
         {
             //if there's speaker name then shower otherside don't
             if (line.hasSpeaker)
-                dialogueSystem.ShowSpeakerName(line.speaker.displayname);
+                dialogueSystem.ShowSpeakerName(line.speakerData.displayname);
             
 
             //Build dialogue
-            yield return BuildLineSegments(line.dialogue);
+            yield return BuildLineSegments(line.dialogueData);
 
             //Wait for user Input
             yield return WaitForUserInput();
@@ -86,7 +86,7 @@ namespace DIALOGUE
 
         IEnumerator Line_RunCommands(DIALOGUE_LINE line)
         {
-            Debug.Log(line.commands);
+            Debug.Log(line.commandData);
             yield return null ;
         }
 
