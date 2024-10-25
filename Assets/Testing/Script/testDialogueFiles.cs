@@ -3,36 +3,39 @@ using System.Collections.Generic;
 using UnityEngine;
 using DIALOGUE;
 
-public class testDialogueFiles : MonoBehaviour
+namespace TESTING
 {
-    [SerializeField] private TextAsset fileToRead = null;
-
-    void Start()
+    public class testDialogueFiles : MonoBehaviour
     {
-        StartConversation();
-    }
+        [SerializeField] private TextAsset fileToRead = null;
 
-    //Read text asset and send to Dialogue System
-    void StartConversation()
-    {
-        List<string> lines = FileManager.ReadTextAsset(fileToRead);
-
-        /*foreach (string line in lines)
+        void Start()
         {
-            if (string.IsNullOrWhiteSpace(line))
+            StartConversation();
+        }
+
+        //Read text asset and send to Dialogue System
+        void StartConversation()
+        {
+            List<string> lines = FileManager.ReadTextAsset(fileToRead);
+
+            /*foreach (string line in lines)
             {
-                continue;
-            }
+                if (string.IsNullOrWhiteSpace(line))
+                {
+                    continue;
+                }
 
-            DIALOGUE_LINE dl = DialogueParser.Parse(line);
+                DIALOGUE_LINE dl = DialogueParser.Parse(line);
 
-            for (int i = 0; i < dl.commandData.commands.Count; i++)
-            {
-                DL_COMMAND_DATA.Command command = dl.commandData.commands[i];
-                Debug.Log($"Command [{i}] '{command.name}' has arguments [{string.Join(", ", command.arguments)}]");
-            }
-        }*/
+                for (int i = 0; i < dl.commandData.commands.Count; i++)
+                {
+                    DL_COMMAND_DATA.Command command = dl.commandData.commands[i];
+                    Debug.Log($"Command [{i}] '{command.name}' has arguments [{string.Join(", ", command.arguments)}]");
+                }
+            }*/
 
-        DialogueSystem.instance.Say(lines);
+            DialogueSystem.instance.Say(lines);
+        }
     }
 }

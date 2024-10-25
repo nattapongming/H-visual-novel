@@ -2,94 +2,97 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
-public class DL_DIALOGUE_DATA 
+namespace DIALOGUE
 {
-    // this class use to spit line from text asset to different segments
-
-    // @ mean that antthing in quote ("") is STRING even escape (\)
-
-    public List<DIALOGUE_SEGMENT> segments;
-
-    //translate find string for letter c || a or w and then c || a space out then number(aka. digit) if there're digit then collect them too
-    //                  @          \{[ca]\}   |     \{w      [ca]      \s                \d                      *\.?          \d*\}
-
-    private const string segmentIdentifierPattern = @"\{[ca]\}|\{w[ca]\s\d*\.?\d*\}";
-
-    public DL_DIALOGUE_DATA(string rawDialogue)
+    public class DL_DIALOGUE_DATA
     {
-        segments = RipSegments(rawDialogue);
-    }
+        // this class use to spit line from text asset to different segments
 
-    public List<DIALOGUE_SEGMENT> RipSegments(string rawDialogue)
-    {
-        List<DIALOGUE_SEGMENT> segments = new List<DIALOGUE_SEGMENT>();
-        MatchCollection matches = Regex.Matches(rawDialogue, segmentIdentifierPattern);
+        // @ mean that antthing in quote ("") is STRING even escape (\)
 
-        int lastIndex = 0;
+        public List<DIALOGUE_SEGMENT> segments;
 
-        //find ONLY the first or only segment in the file
-        DIALOGUE_SEGMENT segment = new DIALOGUE_SEGMENT();
+        //translate find string for letter c || a or w and then c || a space out then number(aka. digit) if there're digit then collect them too
+        //                  @          \{[ca]\}   |     \{w      [ca]      \s                \d                      *\.?          \d*\}
 
-        //if there aren't match segment, then use that dialogue, else use that dialogue UNTIL meet the first index's match
-        segment.dialogue = (matches.Count == 0 ? rawDialogue : rawDialogue.Substring(0, matches[0].Index));
-        segment.startSignal = DIALOGUE_SEGMENT.StartSignal.NONE;
-        segment.signalDelay = 0;
-        segments.Add(segment);
+        private const string segmentIdentifierPattern = @"\{[ca]\}|\{w[ca]\s\d*\.?\d*\}";
 
-        if (matches.Count == 0) { return segments; }
-        else lastIndex = matches[0].Index;
-
-        for (int i = 0; i < matches.Count; i++)
+        public DL_DIALOGUE_DATA(string rawDialogue)
         {
-            Match match = matches[i];
-            segment = new DIALOGUE_SEGMENT();
-
-            //get the start signal for the segment
-            //we will get like this {content} or {A}
-
-            string signalMatch = match.Value; 
-
-            //remove '{' and '}'
-
-            signalMatch = signalMatch.Substring(1, match.Length - 2);
-           
-            //make sure that if we get somethings like{WA} we only get WA not the delay
-
-            string[] signalSplit = signalMatch.Split(' ');
-            
-            //change string to enum
-
-            segment.startSignal = (DIALOGUE_SEGMENT.StartSignal)Enum.Parse(typeof(DIALOGUE_SEGMENT.StartSignal), signalSplit[0].ToUpper());
-
-            //Get the signal delay
-            if (signalSplit.Length > 1)
-                float.TryParse(signalSplit[1], out segment.signalDelay);
-
-            //Check ending of the segments 
-            //if i + 1 < how many matches are found then use NEXT matches index else use dialogue.leght
-
-            int nextIndex = i + 1 < matches.Count ? matches[i + 1].Index : rawDialogue.Length;
-
-            //Get the dialogue of the segment
-
-            segment.dialogue = rawDialogue.Substring(lastIndex + match.Length, nextIndex - (lastIndex + match.Length));
-            lastIndex = nextIndex;
-
-            segments.Add(segment);
+            segments = RipSegments(rawDialogue);
         }
 
-        return segments;
-    }
+        public List<DIALOGUE_SEGMENT> RipSegments(string rawDialogue)
+        {
+            List<DIALOGUE_SEGMENT> segments = new List<DIALOGUE_SEGMENT>();
+            MatchCollection matches = Regex.Matches(rawDialogue, segmentIdentifierPattern);
 
-    public struct DIALOGUE_SEGMENT
-    {
-        public string dialogue;
-        public StartSignal startSignal;
-        public float signalDelay;
+            int lastIndex = 0;
 
-        //none, clear, append, wait (seconds) append, wait clear
-        public enum StartSignal { NONE, C, A, WA, WC}
+            //find ONLY the first or only segment in the file
+            DIALOGUE_SEGMENT segment = new DIALOGUE_SEGMENT();
 
-        public bool appendText => (startSignal == StartSignal.A || startSignal == StartSignal.WA);
+            //if there aren't match segment, then use that dialogue, else use that dialogue UNTIL meet the first index's match
+            segment.dialogue = matches.Count == 0 ? rawDialogue : rawDialogue.Substring(0, matches[0].Index);
+            segment.startSignal = DIALOGUE_SEGMENT.StartSignal.NONE;
+            segment.signalDelay = 0;
+            segments.Add(segment);
+
+            if (matches.Count == 0) { return segments; }
+            else lastIndex = matches[0].Index;
+
+            for (int i = 0; i < matches.Count; i++)
+            {
+                Match match = matches[i];
+                segment = new DIALOGUE_SEGMENT();
+
+                //get the start signal for the segment
+                //we will get like this {content} or {A}
+
+                string signalMatch = match.Value;
+
+                //remove '{' and '}'
+
+                signalMatch = signalMatch.Substring(1, match.Length - 2);
+
+                //make sure that if we get somethings like{WA} we only get WA not the delay
+
+                string[] signalSplit = signalMatch.Split(' ');
+
+                //change string to enum
+
+                segment.startSignal = (DIALOGUE_SEGMENT.StartSignal)Enum.Parse(typeof(DIALOGUE_SEGMENT.StartSignal), signalSplit[0].ToUpper());
+
+                //Get the signal delay
+                if (signalSplit.Length > 1)
+                    float.TryParse(signalSplit[1], out segment.signalDelay);
+
+                //Check ending of the segments 
+                //if i + 1 < how many matches are found then use NEXT matches index else use dialogue.leght
+
+                int nextIndex = i + 1 < matches.Count ? matches[i + 1].Index : rawDialogue.Length;
+
+                //Get the dialogue of the segment
+
+                segment.dialogue = rawDialogue.Substring(lastIndex + match.Length, nextIndex - (lastIndex + match.Length));
+                lastIndex = nextIndex;
+
+                segments.Add(segment);
+            }
+
+            return segments;
+        }
+
+        public struct DIALOGUE_SEGMENT
+        {
+            public string dialogue;
+            public StartSignal startSignal;
+            public float signalDelay;
+
+            //none, clear, append, wait (seconds) append, wait clear
+            public enum StartSignal { NONE, C, A, WA, WC }
+
+            public bool appendText => startSignal == StartSignal.A || startSignal == StartSignal.WA;
+        }
     }
 }

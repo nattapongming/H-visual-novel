@@ -21,13 +21,13 @@ namespace DIALOGUE
 
         public static DIALOGUE_LINE Parse(string rawLine)
         {
-            Debug.Log($"Prasing line '{rawLine}'");
+            //Debug.Log($"Prasing line '{rawLine}'");
 
             //seperate line into 3 sector speaker, dialogue command
 
             (string speaker, string dialogue, string commands) = RipConntent(rawLine);
 
-            Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
+            //Debug.Log($"Speaker = '{speaker}'\nDialogue = '{dialogue}'\nCommands = '{commands}'");
 
             return new DIALOGUE_LINE(speaker, dialogue, commands);
         }
