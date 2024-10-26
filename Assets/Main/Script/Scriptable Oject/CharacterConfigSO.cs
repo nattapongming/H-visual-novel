@@ -11,7 +11,7 @@ namespace CHARACTER
 
         public CharacterConfigData[] characters;
 
-        //find want character with in config if found make copy of that data
+        //find want character with in config if found make copy of that data else use default
         public CharacterConfigData GetConfig(string characterName)
         {
             characterName = characterName.ToLower();

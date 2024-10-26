@@ -18,6 +18,21 @@ namespace CHARACTER
             instance = this;
         }
 
+        public CharacterConfigData GetCharacterConfig(string characterName)
+        {
+            return config.GetConfig(characterName);
+        }
+
+        public Character GetCharacter(string characterName, bool createIfDoesNotExist = false)
+        {
+            if (characters.ContainsKey(characterName.ToLower()))
+                return characters[characterName.ToLower()];
+            else if (createIfDoesNotExist)
+                return CreateCharacter(characterName);
+
+            return null;
+        }
+
         //Create > GetInfo > Creater from info
         public Character CreateCharacter(string characterName)
         {
@@ -34,7 +49,7 @@ namespace CHARACTER
             //add created character into characters dictionary
             characters.Add(characterName.ToLower(), character);
 
-            return null;
+            return character;
         }
 
         private CHARACTER_INFO GetCharacterInfo(string characterName)

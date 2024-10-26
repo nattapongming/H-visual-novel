@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using CHARACTER;
+using DIALOGUE;
 
 namespace TESTING
 {
@@ -10,14 +11,37 @@ namespace TESTING
         // Start is called before the first frame update
         void Start()
         {
-            Character Helena = CharacterManager.instance.CreateCharacter("Helena");
-            Character Sora = CharacterManager.instance.CreateCharacter("Sora");
+            //Character Sora = CharacterManager.instance.CreateCharacter("Sora");*/
+            StartCoroutine(Test());
+            //Test2();
+            
         }
 
-        // Update is called once per frame
-        void Update()
+        IEnumerator Test()
         {
+            Character Helena = CharacterManager.instance.CreateCharacter("Helena");
 
+            List<string> lines = new List<string>()
+            {
+                "Hi",
+                "Sup"
+            };
+            //yield return DialogueSystem.instance.Say(lines);
+            yield return Helena.Say(lines);
+            //yield return null;
+
+        }
+        private void Test2()
+        {
+            Character Helena = CharacterManager.instance.CreateCharacter("Helena");
+
+            List<string> lines = new List<string>()
+            {
+                "Hi",
+                "Sup"
+            };
+            //Helena.Say(lines);
+            Debug.Log("Complete");
         }
     }
 }

@@ -25,7 +25,7 @@ namespace COMMANDS
         {
             if (!database.ContainsKey(commandName))
             {
-                Debug.LogError($"Command '{commandName}' does not exist in the database!");
+                //Debug.LogError($"Command '{commandName}' does not exist in the database!");
                 return null;
             }
 
